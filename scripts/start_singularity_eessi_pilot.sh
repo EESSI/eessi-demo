@@ -1,5 +1,4 @@
 #!/bin/bash
-export COMPILER_PATH=${EPREFIX}/usr/bin
 mkdir -p /tmp/$USER/{var-lib-cvmfs,var-run-cvmfs,home}
 export SINGULARITY_BIND="/tmp/$USER/var-run-cvmfs:/var/run/cvmfs,/tmp/$USER/var-lib-cvmfs:/var/lib/cvmfs"
 export SINGULARITY_HOME="/tmp/$USER/home:/home/$USER"
