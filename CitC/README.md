@@ -120,7 +120,7 @@ You can leverage the SSH public keys registered in your GitHub account.
 * Use your actual first/last name (or somethin funny you make up, go wild!).
 
 ```shell
-sudo /usr/local/sbin/add_user_ldap USERNAME YourFirstNameAdam YourLastName https://github.com/YOUR_GITHUB_ACCOUNT.keys
+sudo /usr/local/sbin/add_user_ldap USERNAME YourFirstName YourLastName https://github.com/YOUR_GITHUB_ACCOUNT.keys
 ```
 
 Then log out of the `citc` management account, and try logging in with your personal account:
