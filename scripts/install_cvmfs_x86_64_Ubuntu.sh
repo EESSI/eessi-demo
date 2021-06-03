@@ -6,10 +6,10 @@ rm -f cvmfs-release-latest_all.deb
 sudo apt-get update
 sudo apt-get install -y cvmfs
 
-wget https://github.com/EESSI/filesystem-layer/releases/download/v0.2.3/cvmfs-config-eessi_0.2.3_all.deb
-sudo dpkg -i cvmfs-config-eessi_0.2.3_all.deb
+wget https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi_latest_all.deb
+sudo dpkg -i cvmfs-config-eessi_latest_all.deb
 
-sudo bash -c "echo 'CVMFS_HTTP_PROXY=DIRECT' > /etc/cvmfs/default.local"
+sudo bash -c "echo 'CVMFS_CLIENT_PROFILE="single"' > /etc/cvmfs/default.local"
 sudo bash -c "echo 'CVMFS_QUOTA_LIMIT=10000' >> /etc/cvmfs/default.local"
 
 sudo cvmfs_config setup
