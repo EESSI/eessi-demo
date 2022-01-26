@@ -1,0 +1,34 @@
+# documentation: https://help.github.com/en/articles/workflow-syntax-for-github-actions
+name: Tests for EESSI pilot repo (native access)
+on: [push, pull_request]
+jobs:
+  pilot_repo_native:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        EESSI_DEMO:
+        - Bioconductor
+        - GROMACS
+        - OpenFOAM
+        - TensorFlow
+        EESSI_VERSION:
+        - "2021.06"
+        - "2021.12"
+    steps:
+        - name: Check out software-layer repository
+          uses: actions/checkout@v2
+
+        - name: Mount EESSI CernVM-FS pilot repository
+          uses: cvmfs-contrib/github-action-cvmfs@main
+          with:
+              cvmfs_config_package: https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi_latest_all.deb
+              cvmfs_http_proxy: DIRECT
+              cvmfs_repositories: pilot.eessi-hpc.org
+
+        - name: Run demo
+          run: |
+              source /cvmfs/pilot.eessi-hpc.org/versions/${{matrix.EESSI_VERSION}}/init/bash
+              cd ${{matrix.EESSI_DEMO}}
+              pwd
+              ./run.sh
