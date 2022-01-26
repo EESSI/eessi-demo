@@ -7,6 +7,6 @@ Used for [SORSE software demo talk on Wed Nov 25th 2020](https://sorse.github.io
 The software in this repository is distributed under the terms of the
 [GNU General Public License v2.0](https://opensource.org/licenses/GPL-2.0).
 
-See [LICENSE](https://github.com/EESSI/eessi-demo/blob/master/LICENSE) for more information.
+See [LICENSE](https://github.com/EESSI/eessi-demo/blob/main/LICENSE) for more information.
 
 SPDX-License-Identifier: GPL-2.0-only
