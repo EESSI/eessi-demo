@@ -7,8 +7,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        EESSI_VERSION:
-        - "2021.06"
+        EESSI_DEMO:
+        - Bioconductor
+        - GROMACS
+        - OpenFOAM
+        - TensorFlow
         EESSI_SOFTWARE_SUBDIR_OVERRIDE:
         - aarch64/generic
         - aarch64/graviton2
@@ -19,11 +22,8 @@ jobs:
         - x86_64/amd/zen3
         - x86_64/intel/haswell
         - x86_64/intel/skylake_avx512
-        EESSI_DEMO:
-        - Bioconductor
-        - GROMACS
-        - OpenFOAM
-        - TensorFlow
+        EESSI_VERSION:
+        - "2021.06"
     steps:
         - name: Check out software-layer repository
           uses: actions/checkout@v2
