@@ -1,6 +1,6 @@
 # documentation: https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: Tests for EESSI pilot repo (native access)
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   pilot_repo_native:
     runs-on: ubuntu-20.04
