@@ -16,7 +16,8 @@ if [ -z $EBROOTOPENFOAM ]; then
     exit 1
 fi
 
-export WORKDIR=/tmp/$USER/$$
+# Allow users to define the WORKDIR externally (for example a shared FS for)
+export WORKDIR="${WORKDIR:-/tmp/$USER/$$}"
 echo "WORKDIR: $WORKDIR"
 mkdir -p $WORKDIR
 cd $WORKDIR
