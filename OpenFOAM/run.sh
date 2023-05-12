@@ -16,7 +16,7 @@ if [ -z $EBROOTOPENFOAM ]; then
     exit 1
 fi
 
-# Allow users to define the WORKDIR externally (for example a shared FS for)
+# Allow users to define the WORKDIR externally (for example a shared FS for multinode runs)
 export WORKDIR="${WORKDIR:-/tmp/$USER/$$}"
 echo "WORKDIR: $WORKDIR"
 mkdir -p $WORKDIR
@@ -29,11 +29,11 @@ BLOCKMESH_DIMENSIONS="100 40 40"
 #BLOCKMESH_DIMENSIONS="200 80 80"
 
 # X*Y*Z should be equal to total number of available cores (across all nodes)
-X=4
-Y=2
-Z=1
+X=${X:-4}
+Y=${Y:-2}
+Z=${Z:-1}
 # number of nodes
-NODES=1
+NODES=${NODES:-1}
 # total number of cores
 NP=$((X * Y * Z))
 # cores per node
