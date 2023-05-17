@@ -1,0 +1,17 @@
+#!/bin/bash
+
+sudo yum install -y fuse
+sudo yum install -y fuse3
+sudo yum install -y gdb
+sudo yum install -y autofs
+sudo yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-2.10.1-1.el9.aarch64.rpm
+sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
+
+sudo service autofs start
+sudo cvmfs_config setup
+
+sudo bash -c "echo 'CVMFS_CLIENT_PROFILE="single"' > /etc/cvmfs/default.local"
+sudo bash -c "echo 'CVMFS_QUOTA_LIMIT=10000' >> /etc/cvmfs/default.local"
+
+sudo cvmfs_config setup
