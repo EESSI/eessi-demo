@@ -11,7 +11,9 @@ if grep "Amazon Linux release 2" /etc/system-release > /dev/null ; then
         rhel_version="7"
     fi
 else
-    echo "You do not seem to be using AmazonLinux 2/2023"
+    echo
+    echo "You do not seem to be using AmazonLinux 2/2023, the rest of this script won't work!"
+    echo
     return 1
 fi
 
