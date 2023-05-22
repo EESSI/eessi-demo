@@ -12,9 +12,9 @@ if grep "Amazon Linux release 2" /etc/system-release > /dev/null ; then
     fi
 else
     echo
-    echo "You do not seem to be using AmazonLinux 2/2023, the rest of this script won't work!"
+    echo "You do not seem to be using AmazonLinux 2 or 2023, the rest of this script won't work!" >&2
     echo
-    return 1
+    exit 1
 fi
 
 # Install CVMFS (no working yum repo for Amazon Linux)
