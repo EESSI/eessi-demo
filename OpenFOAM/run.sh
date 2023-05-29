@@ -83,8 +83,8 @@ decomposePar -copyZero 2>&1 | tee log.decomposeParMultiLevel
 
 # run simulation
 echo "running..."
-+# limit run to first 200 time steps
-+foamDictionary -entry endTime -set 200 system/controlDict
+# limit run to first 200 time steps
+foamDictionary -entry endTime -set 200 system/controlDict
 foamDictionary -entry writeInterval -set 1000 system/controlDict
 foamDictionary -entry runTimeModifiable -set "false" system/controlDict
 foamDictionary -entry functions -set "{}" system/controlDict
