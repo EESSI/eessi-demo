@@ -90,7 +90,7 @@ foamDictionary -entry runTimeModifiable -set "false" system/controlDict
 foamDictionary -entry functions -set "{}" system/controlDict
 
 mpirun --oversubscribe -np $NP potentialFoam -parallel 2>&1 | tee log.potentialFoam
-time mpirun --oversubscribe -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
+time -p mpirun --oversubscribe -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
 
 echo "cleanup..."
 rm -rf $WORKDIR
