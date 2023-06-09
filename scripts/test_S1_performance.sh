@@ -21,7 +21,7 @@ function test_S1 {
     bandwidth=( $(cvmfs_config stat pilot.eessi-hpc.org | column -t -H 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20 ) )
     cache_usage=( $( cvmfs_config stat pilot.eessi-hpc.org | column -t -H 1,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20 ))
     # Print json output
-    echo -n "{\"$1\": {\"time\":\"$realtime\",\"speed\":\"${bandwidth[1]}\",\"speed_unit\":\"${bandwidth[0]}\",\"data\":\"${cache_usage[1]}\",\"data_unit\":\"${cache_usage[0]}\",\"application\":\"$2\"}}" 
+    echo -n "{\"$1\": {\"time\":\"$realtime\",\"speed\":\"${bandwidth[1]}\",\"speed_unit\":\"${bandwidth[0]}\",\"data\":\"${cache_usage[1]}\",\"data_unit\":\"${cache_usage[0]}\",\"application\":\"$2\",\"arch\":\"$EESSI_SOFTWARE_SUBDIR\" }}" 
 }
 
 # Initialise EESSI
