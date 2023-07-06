@@ -27,3 +27,9 @@ jobs:
         - name: Run public S1 performance test
           run: |
               APPLICATION=${{matrix.APPLICATION}} ./scripts/test_S1_performance.sh
+
+        - name: Archive S1 performance results
+          uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce  # v3.1.2
+          with:
+            name: S1-performance-results
+            path: S1_performance_check.json
