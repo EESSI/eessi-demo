@@ -1,5 +1,31 @@
 #!/bin/bash
 
+# Check for pre-existing configuration
+local_eessi_config="/etc/cvmfs/domain.d/eessi-hpc.org.local"
+if [ -f $local_eessi_config ]; then
+   echo "File $local_eessi_config exists, moving it temporarily"
+   sudo mv $local_eessi_config ${local_eessi_config}.tmp
+   restore_eessi_config=true
+else
+   echo "File $local_eessi_config does not exist."
+   restore_eessi_config=false
+fi
+
+# Add the capability to clean up after ourselves
+function cleanup()
+{
+  if [ "$restore_eessi_config" = true ] ; then
+    echo "Restoring original $local_eessi_config"
+    sudo mv ${local_eessi_config}.tmp $local_eessi_config
+  else
+    echo "Removing $local_eessi_config"
+    sudo rm $local_eessi_config
+  fi
+}
+trap cleanup SIGINT
+trap cleanup EXIT
+
+# Function used to help stitch json objects together
 function join_by {
   local d=${1-} f=${2-}
   if shift 2; then
@@ -7,9 +33,10 @@ function join_by {
   fi
 }
 
+# Test a particular S1 and return a valid json object
 function test_S1 {
     # Edit the config file to point to a single S1 option, e.g.,
-    echo 'CVMFS_SERVER_URL="'"$1"'"' | sudo tee /etc/cvmfs/domain.d/eessi-hpc.org.local > /dev/null
+    echo 'CVMFS_SERVER_URL="'"$1"'"' | sudo tee $local_eessi_config > /dev/null
     # Reconfigure CVMFS 
     sudo cvmfs_config setup
     # Wipe the cache and run the example (from github.com/EESSI/eessi-demo)
@@ -30,7 +57,7 @@ source /cvmfs/pilot.eessi-hpc.org/latest/init/bash > /dev/null
 application="${APPLICATION:-TensorFlow}"
 date=$(date -I)
 json_array=()
-for s1server in `grep CVMFS_SERVER_URL /etc/cvmfs/domain.d/eessi-hpc.org.conf | grep -o '".*"' | sed 's/"//g' | tr ';' '\n'`; do
+for s1server in $(grep CVMFS_SERVER_URL /etc/cvmfs/domain.d/eessi-hpc.org.conf | grep -o '".*"' | sed 's/"//g' | tr ';' '\n'); do
 json_array+=("$(test_S1 "$s1server" "$application")")
 done
 echo -e "{\"$date\":["
