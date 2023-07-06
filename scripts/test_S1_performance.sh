@@ -42,7 +42,7 @@ function test_S1 {
     # Wipe the cache and run the example (from github.com/EESSI/eessi-demo)
     sudo cvmfs_config wipecache >& /dev/null
     # Run the example
-    cd ../$2
+    cd $(dirname $(realpath $BASH_SOURCE))/../$2
     # Just print the real time
     realtime=$({ ./run.sh > /dev/null ; } 2> >(grep real | awk '{print $2}'))
     bandwidth=( $(cvmfs_config stat pilot.eessi-hpc.org | column -t -H 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20 ) )

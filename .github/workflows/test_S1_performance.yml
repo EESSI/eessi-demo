@@ -1,6 +1,6 @@
 # documentation: https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: Test performance of public S1 servers (native access)
-on: [push, pull_request]
+on: [pull_request]
 # Declare default permissions as read only.
 permissions: read-all
 jobs:
