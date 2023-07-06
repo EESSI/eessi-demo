@@ -67,6 +67,6 @@ for s1server in $(grep CVMFS_SERVER_URL /etc/cvmfs/domain.d/eessi-hpc.org.conf |
 json_array+=("$(test_S1 "$s1server" "$application")")
 done
 # Store all the (json) output in a single string so we can also stick it in a file
-json_output="$(echo -e "{\"$date\":[")$(join_by ,$'\n' "${json_array[@]}")$(echo -e "\n]}")"
+json_output="$(echo -e "{\"$date\":[\n")$(join_by ,$'\n' "${json_array[@]}")$(echo -e "\n]}")"
 echo -e "$json_output" > $(dirname $(realpath $BASH_SOURCE))/../S1_performance_check.json
 echo -e "$json_output"
