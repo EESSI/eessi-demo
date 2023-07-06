@@ -21,6 +21,12 @@ function cleanup()
     echo "Removing $local_eessi_config"
     sudo rm $local_eessi_config
   fi
+  # disable our traps
+  trap - SIGINT
+  trap - EXIT
+  # exit as normal
+  echo "Finished cleaning up, exiting"
+  exit
 }
 trap cleanup SIGINT
 trap cleanup EXIT
