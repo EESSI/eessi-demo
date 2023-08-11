@@ -20,8 +20,8 @@ then
       rhel_version="9"
     else
       echo "$error_msg"
-        exit 1
-      fi
+      exit 1
+    fi
     # Install CVMFS (without a yum repo for Amazon Linux)
     sudo yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
     sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-2.10.1-1.el${rhel_version}.$(uname -m).rpm
