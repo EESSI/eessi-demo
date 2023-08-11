@@ -22,16 +22,16 @@ then
       echo "$error_msg"
       exit 1
     fi
-    # Install CVMFS (without a yum repo for Amazon Linux)
+    # Install CVMFS (without a yum repo for Amazon Linux), config file first, then CVMFS itself
     sudo yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
-    sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-2.10.1-1.el${rhel_version}.$(uname -m).rpm
-    sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
+    sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-2.10.1-1.el${rhel_version}.$(uname -m).rpm    
   else
-    # Assume everything else is RHEL-like
+    # Assume everything else is RHEL-like (install the yum repo and then cvmfs)
     sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
-    sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
   fi
+  # Install the EESSI configuration
+  sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
 elif [[ $ID_LIKE == *"debian"* ]]
 then
   sudo apt-get install lsb-release wget
