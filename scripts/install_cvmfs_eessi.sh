@@ -23,8 +23,10 @@ then
       exit 1
     fi
     # Install CVMFS (without a yum repo for Amazon Linux), config file first, then CVMFS itself
+    AMAZON_LINUX_CVMFS_VERSION=2.10.1
+    AMAZON_LINUX_CVMFS_PACKAGE_VERSION=${AMAZON_LINUX_CVMFS_VERSION}-1
     sudo yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
-    sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-2.10.1-1.el${rhel_version}.$(uname -m).rpm    
+    sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.1/cvmfs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}.$(uname -m).rpm    
   else
     # Assume everything else is RHEL-like (install the yum repo and then cvmfs)
     sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
