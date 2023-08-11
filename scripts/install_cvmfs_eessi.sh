@@ -43,6 +43,7 @@ then
 
   wget https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi_latest_all.deb
   sudo dpkg -i cvmfs-config-eessi_latest_all.deb
+  rm -f cvmfs-config-eessi_latest_all.deb
 else
   echo "$error_msg"
   exit 1
