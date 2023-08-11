@@ -5,7 +5,7 @@
 echo "Attempting to install EESSI for operating system ($NAME : $VERSION)"
 error_msg="Don't know how to handle operating system ($NAME : $VERSION)"
 # Check whether we have a RHEL-like or Debian-like system
-if [[ $ID_LIKE == *"rhel"* ]] || [[ $ID_LIKE == *"fedora"* ]] || [[ $ID_LIKE == *"centos"* ]]
+if [[ "${ID_LIKE}" =~ "rhel" ]] || [[ "${ID_LIKE}" =~ "fedora" ]] || [[ "${ID_LIKE}" =~ "centos" ]]
 then
   # No working yum repo for Amazon Linux so need to treat that special case
   if [[ $NAME == "Amazon Linux" ]]
@@ -34,7 +34,7 @@ then
   fi
   # Install the EESSI configuration
   sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
-elif [[ $ID_LIKE == *"debian"* ]]
+elif [[ "${ID_LIKE}" =~ "debian" ]]
 then
   sudo apt-get install lsb-release wget
   wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
