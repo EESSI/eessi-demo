@@ -37,7 +37,7 @@ then
       exit 1
     fi
     # Install CVMFS (without a yum repo for Amazon Linux), config file first, then CVMFS itself
-    AMAZON_LINUX_CVMFS_VERSION=2.11.0
+    AMAZON_LINUX_CVMFS_VERSION=2.11.2
     AMAZON_LINUX_CVMFS_PACKAGE_VERSION=${AMAZON_LINUX_CVMFS_VERSION}-1
     sudo yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
     sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-${AMAZON_LINUX_CVMFS_VERSION}/cvmfs-libs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}."$(uname -m)".rpm
@@ -47,9 +47,9 @@ then
     sudo yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
   fi
-  # Install the EESSI configuration
+  # Install the EESSI configuration (not strictly necessary as software.eessi.io ships in the default)
   sudo yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm
-elif [[ "${ID_LIKE}" =~ "debian" ]]
+elif [[ "${ID_LIKE}" =~ "debian" ]] || [[ "${ID}" =~ "debian" ]]
 then
   check_command_sudo "apt-get --help"  # Make sure we have sudo rights for apt-get
   sudo apt-get install lsb-release wget
@@ -60,6 +60,7 @@ then
   sudo apt-get update
   sudo apt-get install -y cvmfs
 
+  # Install the EESSI configuration (not strictly necessary as software.eessi.io ships in the default)
   wget https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi_latest_all.deb
   sudo dpkg -i cvmfs-config-eessi_latest_all.deb
   rm -f cvmfs-config-eessi_latest_all.deb
