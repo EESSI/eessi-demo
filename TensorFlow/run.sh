@@ -7,4 +7,4 @@ else echo "Don't know which TensorFlow module to load for ${EESSI_CVMFS_REPO}/ve
 fi
 
 
-time python TensorFlow-2.x_mnist-test.py
+time -p python TensorFlow-2.x_mnist-test.py
