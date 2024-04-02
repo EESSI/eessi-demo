@@ -1,6 +1,11 @@
 #!/bin/bash
 
-module load OpenFOAM/8-foss-2020a
+if [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2023.06" ]]; then module load OpenFOAM/10-foss-2023a
+elif [[ $EESSI_CVMFS_REPO == "/cvmfs/pilot.eessi-hpc.org" ]] && [[ $EESSI_PILOT_VERSION == "2021.12" ]]; then module load OpenFOAM/8-foss-2020a
+elif [[ $EESSI_CVMFS_REPO == "/cvmfs/pilot.eessi-hpc.org" ]] && [[ $EESSI_PILOT_VERSION == "2023.06" ]]; then module load OpenFOAM/v2112-foss-2021b
+else echo "Don't know which OpenFOAM module to load for ${EESSI_CVMFS_REPO}/versions/${EESSI_VERSION}$EESSI_PILOT_VERSION" >&2; exit 1
+fi
+
 
 which ssh &> /dev/null
 if [ $? -ne 0 ]; then
