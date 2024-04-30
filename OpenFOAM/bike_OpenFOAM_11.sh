@@ -1,5 +1,7 @@
 #!/bin/bash
 
+module load OpenFOAM/11-foss-2023a
+
 which ssh &> /dev/null
 if [ $? -ne 0 ]; then
     # if ssh is not available, set plm_rsh_agent to empty value to avoid OpenMPI failing over it
@@ -52,19 +54,19 @@ pwd
 # generate mesh
 # All Foam dictionary sub entries are accssed using / (<main entry>/<sub entry>) rather than . (<main entry>.<sub entry>)
 echo "generating mesh..."
-# Needed to reduce this to a smaller value 200 million is too big for 8 processes, therefore setting to 7 million.
-foamDictionary  -entry castellatedMeshControls/maxGlobalCells -set 8000000 system/snappyHexMeshDict
+# Needed to reduce this to a smaller value 200 million is too big for 8 processes, therefore setting to 8 million.
+foamDictionary -entry castellatedMeshControls/maxGlobalCells -set 8000000 system/snappyHexMeshDict
 foamDictionary -entry blocks -set "( hex ( 0 1 2 3 4 5 6 7 ) ( $BLOCKMESH_DIMENSIONS ) simpleGrading ( 1 1 1 ) )" system/blockMeshDict
 foamDictionary -entry numberOfSubdomains -set $NP system/decomposeParDict
 foamDictionary -entry hierarchicalCoeffs/n -set "($X $Y $Z)" system/decomposeParDict
 
 # this needs to be moved to constant/geometry and not constant/triSurface/
-cp $WM_PROJECT_DIR/tutorials/resources/geometry/motorBike.obj.gz constant/triSurface/
+cp $WM_PROJECT_DIR/tutorials/resources/geometry/motorBike.obj.gz constant/geometry/
 #surfaceFeaturesDict not available.
 # surfaceFeatures 2>&1 | tee log.surfaceFeatures 
 blockMesh 2>&1 | tee log.blockMesh
 decomposePar -copyZero 2>&1 | tee log.decomposePar
-mpirun -np $NP -ppn $PPN -hostfile hostlist snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh
+mpirun -np $NP -npernode $PPN snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh
 reconstructPar -constant
 rm -rf ./processor*
 renumberMesh -constant -overwrite 2>&1 | tee log.renumberMesh
@@ -96,4 +98,4 @@ mpirun --oversubscribe -np $NP potentialFoam -parallel 2>&1 | tee log.potentialF
 time mpirun --oversubscribe -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
 
 echo "cleanup..."
-rm -rf $WORKDIR
+#rm -rf $WORKDIR
