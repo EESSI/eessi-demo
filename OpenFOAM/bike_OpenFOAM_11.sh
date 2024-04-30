@@ -98,4 +98,4 @@ mpirun --oversubscribe -np $NP potentialFoam -parallel 2>&1 | tee log.potentialF
 time mpirun --oversubscribe -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
 
 echo "cleanup..."
-#rm -rf $WORKDIR
+rm -rf $WORKDIR
