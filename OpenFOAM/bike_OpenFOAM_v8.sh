@@ -1,14 +1,5 @@
 #!/bin/bash
 
-if [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2023.06" ]]; then module load OpenFOAM/10-foss-2023a
-elif [[ $EESSI_CVMFS_REPO == "/cvmfs/pilot.eessi-hpc.org" ]] && [[ $EESSI_PILOT_VERSION == "2021.12" ]]; then module load OpenFOAM/8-foss-2020a
-elif [[ $EESSI_CVMFS_REPO == "/cvmfs/pilot.eessi-hpc.org" ]] && [[ $EESSI_PILOT_VERSION == "2023.06" ]]; 
-then echo There is no demo for OpenFOAM in "/cvmfs/pilot.eessi-hpc.org/versions/2023.06". Please use the EESSI production repo "/cvmfs/software.eessi.io".;
-exit 1;
-else echo "Don't know which OpenFOAM module to load for ${EESSI_CVMFS_REPO}/versions/${EESSI_VERSION}$EESSI_PILOT_VERSION" >&2; exit 1
-fi
-
-
 which ssh &> /dev/null
 if [ $? -ne 0 ]; then
     # if ssh is not available, set plm_rsh_agent to empty value to avoid OpenMPI failing over it
@@ -68,7 +59,7 @@ cp $WM_PROJECT_DIR/tutorials/resources/geometry/motorBike.obj.gz constant/triSur
 surfaceFeatures 2>&1 | tee log.surfaceFeatures
 blockMesh 2>&1 | tee log.blockMesh
 decomposePar -copyZero 2>&1 | tee log.decomposePar
-mpirun -np $NP -ppn $PPN -hostfile hostlist snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh
+mpirun -np $NP -ppn $PPN snappyHexMesh -parallel -overwrite 2>&1 | tee log.snappyHexMesh
 reconstructParMesh -constant
 rm -rf ./processor*
 renumberMesh -constant -overwrite 2>&1 | tee log.renumberMesh
@@ -96,8 +87,8 @@ foamDictionary -entry writeInterval -set 1000 system/controlDict
 foamDictionary -entry runTimeModifiable -set "false" system/controlDict
 foamDictionary -entry functions -set "{}" system/controlDict
 
-mpirun --oversubscribe -np $NP potentialFoam -parallel 2>&1 | tee log.potentialFoam
-time mpirun --oversubscribe -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
+mpirun -np $NP potentialFoam -parallel 2>&1 | tee log.potentialFoam
+time mpirun -np $NP simpleFoam -parallel 2>&1 | tee log.simpleFoam
 
 echo "cleanup..."
 rm -rf $WORKDIR
