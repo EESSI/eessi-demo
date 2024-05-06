@@ -1,5 +1,7 @@
 #!/bin/bash
 
+module load OpenFOAM/8-foss-2020a
+
 which ssh &> /dev/null
 if [ $? -ne 0 ]; then
     # if ssh is not available, set plm_rsh_agent to empty value to avoid OpenMPI failing over it
