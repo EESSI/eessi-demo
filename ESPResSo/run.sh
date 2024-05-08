@@ -9,4 +9,7 @@ else echo "Don't know which ESPResSo module to load for ${EESSI_CVMFS_REPO}/vers
 fi
 
 echo generating plate_capacitor_before.png and plate_capacitor_after.png ...
+
+# allow oversubscription for this trivial case
+export OMPI_MCA_rmaps_base_oversubscribe=true
 mpirun -np 2 pypresso plate_capacitor.py
