@@ -2,7 +2,7 @@
 set -e
 
 if [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2023.06" ]]; then module load GROMACS/2024.1-foss-2023b
-else echo "Don't know which GROMACS module to load for ${EESSI_CVMFS_REPO}/versions/${EESSI_VERSION}$EESSI_PILOT_VERSION" >&2; exit 1
+else echo "Don't know which GROMACS module to load for ${EESSI_CVMFS_REPO}/versions/${EESSI_VERSION}" >&2; exit 1
 fi
 
 if [ ! -f GROMACS_TestCaseA.tar.gz ]; then
