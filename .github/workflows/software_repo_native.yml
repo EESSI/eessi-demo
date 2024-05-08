@@ -1,5 +1,5 @@
 # documentation: https://help.github.com/en/articles/workflow-syntax-for-github-actions
-name: Tests for EESSI pilot repo (native access)
+name: Tests for EESSI software repo (native access)
 on: [push, pull_request, workflow_dispatch]
 # Declare default permissions as read only.
 permissions: read-all
@@ -14,25 +14,25 @@ jobs:
         - GROMACS
         - OpenFOAM
         - TensorFlow
+        - ESPResSo
         EESSI_VERSION:
-        - "2021.06"
-        - "2021.12"
+        - "2023.06"
     steps:
         - name: Check out software-layer repository
           uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
           with:
             persist-credentials: false
 
-        - name: Mount EESSI CernVM-FS pilot repository
+        - name: Mount EESSI CernVM-FS software repository
           uses: cvmfs-contrib/github-action-cvmfs@55899ca74cf78ab874bdf47f5a804e47c198743c # v4.0
           with:
               cvmfs_config_package: https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi_latest_all.deb
               cvmfs_http_proxy: DIRECT
-              cvmfs_repositories: pilot.eessi-hpc.org
+              cvmfs_repositories: software.eessi.io
 
         - name: Run demo
           run: |
-              source /cvmfs/pilot.eessi-hpc.org/versions/${{matrix.EESSI_VERSION}}/init/bash
+              source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
               cd ${{matrix.EESSI_DEMO}}
               pwd
               ./run.sh
