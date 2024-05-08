@@ -1,4 +1,4 @@
-Small examples for various scientific software applications included in the [EESSI pilot repository](https://eessi.github.io/docs/pilot).
+Small examples for various scientific software applications included in the [EESSI software repository](https://www.eessi.io/docs/).
 
 See the `scripts` directory for useful scripts that can help you quickly install EESSI on Ubuntu or RHEL-based systems.
 
