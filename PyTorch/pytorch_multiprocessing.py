@@ -1,5 +1,6 @@
 # This example is based on the code given at
 # https://www.geeksforgeeks.org/multiprocessing-in-python-and-pytorch/
+# (as of 18 July 2024)
 
 # Import the necessary libraries 
 import torch 
