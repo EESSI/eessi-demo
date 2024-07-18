@@ -1,89 +1,84 @@
-import torch
-import torch.multiprocessing as mp
-import torch.nn as nn
-import torch.optim as optim
-import logging
-import random
+# This example is based on the code given at
+# https://www.geeksforgeeks.org/multiprocessing-in-python-and-pytorch/
 
-SIZE = 500
-N = 10  # Number of forward passes
+# Import the necessary libraries 
+import torch 
+import torch.nn as nn 
+import torch.multiprocessing as mp 
 
-# Initialize logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 
-class SimpleNet(nn.Module):
-    def __init__(self):
-        super(SimpleNet, self).__init__()
-        self.fc1 = nn.Linear(SIZE, 100)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(100, 10)
+# Define the training function 
+def train(model, X, Y): 
+	# Define the learning rate, number of iterations, and loss function 
+	learning_rate = 0.01
+	n_iters = 100
+	loss = nn.MSELoss() 
+	optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate) 
 
-    def forward(self, x):
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-        return x
+	# Loop through the specified number of iterations 
+	for epoch in range(n_iters): 
+		# Make predictions using the model 
+		y_predicted = model(X) 
 
-def worker(rank, barrier):
-    logging.info(f"Worker {rank} started")
+		# Calculate the loss 
+		l = loss(Y, y_predicted) 
 
-    try:
-        # Synchronize all workers
-        barrier.wait()
+		# Backpropagate the loss to update the model parameters 
+		l.backward() 
+		optimizer.step() 
+		optimizer.zero_grad() 
 
-        # Set a unique seed for each worker
-        seed = torch.initial_seed() + rank
-        torch.manual_seed(seed)
-        random.seed(seed)
+		# Print the current loss and weights every 10 epochs 
+		if epoch % 10 == 0: 
+			[w, b] = model.parameters() 
+			print( 
+				f"Rank {mp.current_process().name}: epoch {epoch+1}: w = {w[0][0].item():.3f}, loss = {l:.3f}"
+			) 
 
-        # Create a simple neural network
-        net = SimpleNet()
 
-        # Create a random input tensor and a target tensor
-        input_tensor = torch.rand((SIZE, SIZE))
-        target_tensor = torch.randint(0, 10, (SIZE,))
+# Main function 
+if __name__ == "__main__": 
+	# Set the number of processes and define the input and output data 
+	num_processes = mp.cpu_count()  # Get the number of CPUs without limiting
+	X = torch.tensor([[1], [2], [3], [4]], dtype=torch.float32) 
+	Y = torch.tensor([[2], [4], [6], [8]], dtype=torch.float32) 
+	n_samples, n_features = X.shape 
 
-        # Define a loss function and an optimizer
-        criterion = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(net.parameters(), lr=0.01)
+	# Print the number of samples and features 
+	print(f"#samples: {n_samples}, #features: {n_features}") 
 
-        for _ in range(N):
-            # Perform forward pass
-            output = net(input_tensor)
+	# Define the test input and the model input/output sizes 
+	X_test = torch.tensor([5], dtype=torch.float32) 
+	input_size = n_features 
+	output_size = n_features 
 
-            # Compute the loss
-            loss = criterion(output, target_tensor)
+	# Define the linear model and print its prediction on the test input before training 
+	model = nn.Linear(input_size, output_size) 
+	print(f"Prediction before training: f(5) = {model(X_test).item():.3f}") 
 
-            # Perform backward pass
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+	# Share the model's memory to allow it to be accessed by multiple processes 
+	model.share_memory() 
 
-            logging.info(f"Worker {rank} - Loss: {loss.item()}")
+	# Create a list of processes and start each process with the train function 
+	processes = [] 
+	for rank in range(num_processes): 
+		p = mp.Process( 
+			target=train, 
+			args=( 
+				model, 
+				X, 
+				Y, 
+			), 
+			name=f"Process-{rank}", 
+		) 
+		p.start() 
+		processes.append(p) 
+		print(f"Started {p.name}") 
 
-        logging.info(f"Worker {rank} finished all {N} forward passes.")
+	# Wait for all processes to finish 
+	for p in processes: 
+		p.join() 
+		print(f"Finished {p.name}") 
 
-    except Exception as e:
-        logging.error(f"Worker {rank} failed with error: {e}")
-
-def test():
-    num_workers = mp.cpu_count()  # Get the number of CPUs without limiting
-    logging.info(f"Running test on {num_workers} CPUs")
-
-    # Create a barrier to synchronize workers
-    barrier = mp.Barrier(num_workers)
-
-    # Create a process for each CPU
-    processes = []
-    for rank in range(num_workers):
-        p = mp.Process(target=worker, args=(rank, barrier))
-        p.start()
-        processes.append(p)
-
-    # Wait for all processes to finish
-    for p in processes:
-        p.join()
-
-if __name__ == "__main__":
-    test()
-
+	# Print the model's prediction on the test input after training 
+	print(f"Prediction after training: f(5) = {model(X_test).item():.3f}") 
