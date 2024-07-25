@@ -15,6 +15,7 @@ jobs:
         - OpenFOAM
         - TensorFlow
         - ESPResSo
+        - QuantumESPRESSO
         EESSI_VERSION:
         - "2023.06"
     steps:
