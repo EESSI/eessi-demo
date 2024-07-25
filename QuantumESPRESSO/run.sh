@@ -183,18 +183,12 @@ set grid x
 set ylabel "Energy (eV)"
 set nokey
 EF = 6.377
-set term post enhanced
-set out "Sibands-nosym.ps"
-plot "Sibands.dat.gnu" u 1:(\$2-EF) with linespoints pointtype 7 pointsize 0.5,\
-	0 t "" w l lt 2
 set term pngcairo
 set out "Sibands-nosym.png"
-replot
+plot "Sibands.dat.gnu" u 1:(\$2-EF) with linespoints pointtype 7 pointsize 0.5,\
+	0 t "" w l lt 2
 set term dumb size 120,40
 set out 
-replot
-set term qt
-set out
 replot
 EOF
 
