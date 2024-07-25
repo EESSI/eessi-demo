@@ -7,6 +7,12 @@ else
     exit 1
 fi
 
+export OMP_NUM_THREADS=1
+export OMPI_MCA_osc=^ucx
+export OMPI_MCA_btl=^openib,ofi
+export OMPI_MCA_pml=^ucx
+export OMPI_MCA_mtl=^ofi
+
 if [ ! -f Si.pz-vbc.UPF ]; then
     curl -OL http://pseudopotentials.quantum-espresso.org/upf_files/Si.pz-vbc.UPF
 fi
