@@ -16,6 +16,7 @@ jobs:
         - TensorFlow
         - ESPResSo
         - PyTorch
+        - QuantumESPRESSO
         EESSI_VERSION:
         - "2023.06"
     steps:
