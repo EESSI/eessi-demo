@@ -60,7 +60,8 @@ then
   dry_run "yum install -y https://github.com/EESSI/filesystem-layer/releases/download/latest/cvmfs-config-eessi-latest.noarch.rpm"
 elif [[ "${ID_LIKE}" =~ "debian" ]] || [[ "${ID}" =~ "debian" ]]
 then
-  dry_run "apt-get install lsb-release wget"
+  dry_run "apt-get update"
+  dry_run "apt-get install -y lsb-release wget"
   dry_run "wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb"
   dry_run "dpkg -i cvmfs-release-latest_all.deb"
   dry_run "rm -f cvmfs-release-latest_all.deb"
