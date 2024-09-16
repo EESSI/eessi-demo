@@ -200,5 +200,3 @@ EOF
 
 echo -e "\tRunning gnuplot script: " `date`
 gnuplot -p Sibands.gnuplot
-
-exit
