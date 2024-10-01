@@ -8,10 +8,10 @@ else
 fi
 
 export OMP_NUM_THREADS=1
-export OMPI_MCA_osc=^ucx
-export OMPI_MCA_btl=^openib,ofi
-export OMPI_MCA_pml=^ucx
-export OMPI_MCA_mtl=^ofi
+export OMPI_MCA_osc=${OMPI_MCA_osc:-"^ucx"}
+export OMPI_MCA_btl=${OMPI_MCA_btl:-"^openib,ofi"}
+export OMPI_MCA_pml=${OMPI_MCA_pml:-"^ucx"}
+export OMPI_MCA_mtl=${OMPI_MCA_mtl:-"^ofi"}
 
 if [ ! -f Si.pz-vbc.UPF ]; then
     curl -OL http://pseudopotentials.quantum-espresso.org/upf_files/Si.pz-vbc.UPF
@@ -19,7 +19,7 @@ fi
 
 PSEUDO_DIR=$(pwd)
 TMP_DIR=$(pwd)/tmp
-RUN_COMMAND=""
+RUN_COMMAND=${RUN_COMMAND:-""}
 
 echo "Parallel command:" $RUN_COMMAND
 echo "Started at: " `date`
