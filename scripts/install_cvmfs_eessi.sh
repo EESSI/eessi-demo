@@ -1,4 +1,6 @@
 #!/bin/bash
+# Note: The cvmfs package server has a browseable mirror under
+# https://cvmrepo.s3.cern.ch/cvmrepo -> https://cvmrepo.web.cern.ch/cvmrepo
 
 # Dry run function
 dry_run() {
@@ -46,14 +48,14 @@ then
       exit 1
     fi
     # Install CVMFS (without a yum repo for Amazon Linux), config file first, then CVMFS itself
-    AMAZON_LINUX_CVMFS_VERSION=2.11.2
+    AMAZON_LINUX_CVMFS_VERSION=2.11.5
     AMAZON_LINUX_CVMFS_PACKAGE_VERSION=${AMAZON_LINUX_CVMFS_VERSION}-1
-    dry_run "yum install -y http://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm"
-    dry_run "yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-${AMAZON_LINUX_CVMFS_VERSION}/cvmfs-libs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}.$(uname -m).rpm"
-    dry_run "yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-${AMAZON_LINUX_CVMFS_VERSION}/cvmfs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}.$(uname -m).rpm"
+    dry_run "yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-config-default-latest.noarch.rpm"
+    dry_run "yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs/EL/${rhel_version}/$(uname -m)/cvmfs-libs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}.$(uname -m).rpm"
+    dry_run "yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs/EL/${rhel_version}/$(uname -m)/cvmfs-${AMAZON_LINUX_CVMFS_PACKAGE_VERSION}.el${rhel_version}.$(uname -m).rpm"
   else
     # Assume everything else is RHEL-like (install the yum repo and then cvmfs)
-    dry_run "yum install -y https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm"
+    dry_run "yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm"
     dry_run "yum install -y cvmfs"
   fi
   # Install the EESSI configuration (not strictly necessary as software.eessi.io ships in the default)
@@ -62,7 +64,7 @@ elif [[ "${ID_LIKE}" =~ "debian" ]] || [[ "${ID}" =~ "debian" ]]
 then
   dry_run "apt-get update"
   dry_run "apt-get install -y lsb-release wget"
-  dry_run "wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb"
+  dry_run "wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb"
   dry_run "dpkg -i cvmfs-release-latest_all.deb"
   dry_run "rm -f cvmfs-release-latest_all.deb"
   dry_run "apt-get update"
