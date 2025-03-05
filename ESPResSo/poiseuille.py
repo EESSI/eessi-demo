@@ -47,6 +47,7 @@ if args.gpu:
     required_features += ["CUDA", "LB_BOUNDARIES_GPU"]
 espressomd.assert_features(required_features)
 
+# small domain size to keep the overhead of data collection to a minimum
 BOX_L_X = 16.
 BOX_L_Y = 12.
 BOX_L_Z = 12.
@@ -79,11 +80,19 @@ bottom_boundary = espressomd.lbboundaries.LBBoundary(shape=bottom_wall)
 system.lbboundaries.add(top_boundary)
 system.lbboundaries.add(bottom_boundary)
 
+# collect the flow profile at different simulation times
 sim_xdata = (np.arange(lbf.shape[0]) + 0.5) * AGRID
 sim_ydata_list = []
 for i in tqdm.trange(30, mininterval=0.001):
+    # integrate the fluid motion; the number of steps can be increased to
+    # better appreciate the different scaling behavior of the CPU and GPU
+    # implementations, however the time step need to be adjusted accordingly
+    # to preserve the shape of the plotted curves
     system.integrator.run(1100)
     if (i + 1) % 10 == 0:
+        # collect fluid velocity on all LB cells (involves an expensive
+        # device-to-host data transfer for the GPU implementation) and
+        # compute the average velocity along the x-axis
         fluid_velocities = (lbf[:,:,:].velocity)[:,:,:,1]
         fluid_velocities = np.average(fluid_velocities, axis=(1,2))
         sim_ydata_list.append((system.time, fluid_velocities))
