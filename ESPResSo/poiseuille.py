@@ -47,19 +47,21 @@ if args.gpu:
     required_features += ["CUDA", "LB_BOUNDARIES_GPU"]
 espressomd.assert_features(required_features)
 
-BOX_L = 16.0
-TIME_STEP = 0.01
+BOX_L_X = 16.
+BOX_L_Y = 12.
+BOX_L_Z = 12.
+TIME_STEP = 0.001
 AGRID = 0.5
 VISCOSITY = 2.0
 FORCE_DENSITY = [0.0, 0.001, 0.0]
 DENSITY = 1.5
 WALL_OFFSET = AGRID
-HEIGHT = BOX_L - 2.0 * AGRID
+HEIGHT = BOX_L_X - 2.0 * AGRID
 
 def poiseuille_flow(x, force_density, dynamic_viscosity, height):
     return force_density / (2 * dynamic_viscosity) * (height**2 / 4 - x**2)
 
-system = espressomd.System(box_l=[BOX_L] * 3)
+system = espressomd.System(box_l=[BOX_L_X, BOX_L_Y, BOX_L_Z])
 system.time_step = TIME_STEP
 system.cell_system.skin = 0.4
 
@@ -71,7 +73,7 @@ lbf = LBFluid(agrid=AGRID, dens=DENSITY, visc=VISCOSITY,
               tau=TIME_STEP, ext_force_density=FORCE_DENSITY)
 system.actors.add(lbf)
 top_wall = espressomd.shapes.Wall(normal=[1, 0, 0], dist=WALL_OFFSET)
-bottom_wall = espressomd.shapes.Wall(normal=[-1, 0, 0], dist=-(BOX_L - WALL_OFFSET))
+bottom_wall = espressomd.shapes.Wall(normal=[-1, 0, 0], dist=-(BOX_L_X - WALL_OFFSET))
 top_boundary = espressomd.lbboundaries.LBBoundary(shape=top_wall)
 bottom_boundary = espressomd.lbboundaries.LBBoundary(shape=bottom_wall)
 system.lbboundaries.add(top_boundary)
@@ -79,19 +81,19 @@ system.lbboundaries.add(bottom_boundary)
 
 sim_xdata = (np.arange(lbf.shape[0]) + 0.5) * AGRID
 sim_ydata_list = []
-for i in tqdm.trange(30):
-    system.integrator.run(50)
+for i in tqdm.trange(30, mininterval=0.001):
+    system.integrator.run(1100)
     if (i + 1) % 10 == 0:
         fluid_velocities = (lbf[:,:,:].velocity)[:,:,:,1]
         fluid_velocities = np.average(fluid_velocities, axis=(1,2))
         sim_ydata_list.append((system.time, fluid_velocities))
 
-ref_xdata = np.linspace(0.0, BOX_L, lbf.shape[0])
+ref_xdata = np.linspace(0.0, BOX_L_X, lbf.shape[0])
 ref_ydata = poiseuille_flow(ref_xdata - (HEIGHT / 2 + AGRID), FORCE_DENSITY[1],
                            VISCOSITY * DENSITY, HEIGHT)
 # velocity is zero inside the walls
 ref_ydata[np.nonzero(ref_xdata < WALL_OFFSET)] = 0.0
-ref_ydata[np.nonzero(ref_xdata > BOX_L - WALL_OFFSET)] = 0.0
+ref_ydata[np.nonzero(ref_xdata > BOX_L_X - WALL_OFFSET)] = 0.0
 
 print("\n\n")
 
