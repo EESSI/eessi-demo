@@ -35,4 +35,5 @@ jobs:
               source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
               cd ${{matrix.EESSI_DEMO}}
               pwd
+              [ {{matrix.EESSI_DEMO}} = OpenFOAM ] && export X=2 Y=1 Z=1
               ./run.sh
