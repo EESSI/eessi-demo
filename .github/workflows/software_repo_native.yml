@@ -35,5 +35,13 @@ jobs:
               source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
               cd ${{matrix.EESSI_DEMO}}
               pwd
-              [ {{matrix.EESSI_DEMO}} = OpenFOAM ] && export X=2 Y=1 Z=1
+              if [ {{matrix.EESSI_DEMO}} = OpenFOAM ]; then
+                  export X=2 Y=1 Z=1
+                  sudo swapoff -a
+                  sudo fallocate -l 24G /swapfile
+                  sudo chmod 600 /swapfile
+                  sudo mkswap /swapfile
+                  sudo swapon /swapfile
+                  sudo swapon --show
+              fi
               ./run.sh
