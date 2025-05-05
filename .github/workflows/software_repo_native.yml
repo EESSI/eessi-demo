@@ -19,12 +19,6 @@ jobs:
           - PyTorch
           - QuantumESPRESSO
         EESSI_VERSION: ["2023.06"]
-        exclude:
-          # skip OpenFOAM as it crashes near the end (most likely due to resource usage)
-          - os: ubuntu-24.04
-            EESSI_DEMO: OpenFOAM
-          - os: ubuntu-24.04-arm
-            EESSI_DEMO: OpenFOAM
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -40,7 +34,14 @@ jobs:
 
       - name: Run demo
         run: |
-          source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
-          cd ${{matrix.EESSI_DEMO}}
-          pwd
-          ./run.sh
+            source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
+            cd ${{matrix.EESSI_DEMO}}
+            pwd
+            if [ ${{matrix.EESSI_DEMO}} = OpenFOAM ]; then
+                # Reduce number of cores and problem size to prevent the runner from being killed
+                export X=2 Y=2 Z=1
+                sed -i 's/BLOCKMESH_DIMENSIONS="100 40 40"/BLOCKMESH_DIMENSIONS="20 8 8"/g' bike_OpenFOAM_v11.sh
+                sed -i 's/endTime -set 200/endTime -set 5/g' bike_OpenFOAM_v11.sh
+                sed -i 's/maxGlobalCells -set 8000000/maxGlobalCells -set 100000/g' bike_OpenFOAM_v11.sh
+            fi
+            ./run.sh
