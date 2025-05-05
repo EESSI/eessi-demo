@@ -1,38 +1,44 @@
-# documentation: https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: Tests for EESSI software repo (native access)
+
 on: [push, pull_request, workflow_dispatch]
-# Declare default permissions as read only.
+
 permissions: read-all
+
 jobs:
   software_repo_native:
-    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-22.04, ubuntu-22.04-arm]
         EESSI_DEMO:
-        - Bioconductor
-        - GROMACS
-        - OpenFOAM
-        - TensorFlow
-        - ESPResSo
-        - PyTorch
-        - QuantumESPRESSO
-        EESSI_VERSION:
-        - "2023.06"
+          - Bioconductor
+          - GROMACS
+          - OpenFOAM
+          - TensorFlow
+          - ESPResSo
+          - PyTorch
+          - QuantumESPRESSO
+        EESSI_VERSION: ["2023.06"]
+        exclude:
+          - os: ubuntu-22.04
+            EESSI_DEMO: OpenFOAM  # skip OpenFOAM on Ubuntu 22.04 as it crashes due to resource usage
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-        - name: Check out software-layer repository
-          uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-          with:
-            persist-credentials: false
+      - name: Check out software-layer repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
 
-        - name: Mount EESSI CernVM-FS software repository
-          uses: eessi/github-action-eessi@v3
-          with:
-            eessi_stack_version: '2023.06'
+      - name: Mount EESSI CernVM-FS software repository
+        uses: eessi/github-action-eessi@v3
+        with:
+          eessi_stack_version: ${{ matrix.EESSI_VERSION }}
 
-        - name: Run demo
-          run: |
-              source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
-              cd ${{matrix.EESSI_DEMO}}
-              pwd
-              ./run.sh
+      - name: Run demo
+        run: |
+          source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
+          cd ${{matrix.EESSI_DEMO}}
+          pwd
+          ./run.sh
