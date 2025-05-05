@@ -20,9 +20,11 @@ jobs:
           - QuantumESPRESSO
         EESSI_VERSION: ["2023.06"]
         exclude:
+          # skip OpenFOAM as it crashes near the end (most likely due to resource usage)
           - os: ubuntu-24.04
-            EESSI_DEMO: OpenFOAM  # skip OpenFOAM on Ubuntu 22.04 as it crashes due to resource usage
-
+            EESSI_DEMO: OpenFOAM
+          - os: ubuntu-24.04-arm
+            EESSI_DEMO: OpenFOAM
     runs-on: ${{ matrix.os }}
 
     steps:
