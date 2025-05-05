@@ -36,15 +36,10 @@ jobs:
               cd ${{matrix.EESSI_DEMO}}
               pwd
               if [ ${{matrix.EESSI_DEMO}} = OpenFOAM ]; then
-                  export X=2 Y=1 Z=1
-                  sed -i 's/BLOCKMESH_DIMENSIONS="100 40 40"/BLOCKMESH_DIMENSIONS="50 20 20"/g' bike_OpenFOAM_v11.sh
-                  sed -i 's/endTime -set 200/endTime -set 20/g' bike_OpenFOAM_v11.sh
-                  sed -i 's/maxGlobalCells -set 8000000/maxGlobalCells -set 1000000/g' bike_OpenFOAM_v11.sh
-                  sudo swapoff -a
-                  sudo fallocate -l 24G /swapfile
-                  sudo chmod 600 /swapfile
-                  sudo mkswap /swapfile
-                  sudo swapon /swapfile
-                  sudo swapon --show
+                  # Reduce number of cores and problem size to prevent the runner from being killed
+                  export X=2 Y=2 Z=1
+                  sed -i 's/BLOCKMESH_DIMENSIONS="100 40 40"/BLOCKMESH_DIMENSIONS="20 8 8"/g' bike_OpenFOAM_v11.sh
+                  sed -i 's/endTime -set 200/endTime -set 5/g' bike_OpenFOAM_v11.sh
+                  sed -i 's/maxGlobalCells -set 8000000/maxGlobalCells -set 100000/g' bike_OpenFOAM_v11.sh
               fi
               ./run.sh
