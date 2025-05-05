@@ -35,7 +35,7 @@ jobs:
               source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
               cd ${{matrix.EESSI_DEMO}}
               pwd
-              if [ {{matrix.EESSI_DEMO}} = OpenFOAM ]; then
+              if [ ${{matrix.EESSI_DEMO}} = OpenFOAM ]; then
                   export X=2 Y=1 Z=1
                   sed -i 's/BLOCKMESH_DIMENSIONS="100 40 40"/BLOCKMESH_DIMENSIONS="50 20 20"/g' bike_OpenFOAM_v11.sh
                   sed -i 's/endTime -set 200/endTime -set 20/g' bike_OpenFOAM_v11.sh
