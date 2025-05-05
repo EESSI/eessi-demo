@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-22.04-arm]
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
         EESSI_DEMO:
           - Bioconductor
           - GROMACS
@@ -20,7 +20,7 @@ jobs:
           - QuantumESPRESSO
         EESSI_VERSION: ["2023.06"]
         exclude:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
             EESSI_DEMO: OpenFOAM  # skip OpenFOAM on Ubuntu 22.04 as it crashes due to resource usage
 
     runs-on: ${{ matrix.os }}
