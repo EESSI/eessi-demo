@@ -17,6 +17,7 @@ jobs:
         - ESPResSo
         - PyTorch
         - QuantumESPRESSO
+        - tblite 
         EESSI_VERSION:
         - "2023.06"
     steps:
