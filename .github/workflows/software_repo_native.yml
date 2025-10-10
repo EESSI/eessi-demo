@@ -19,6 +19,7 @@ jobs:
           - PyTorch
           - QuantumESPRESSO
           - Nextflow
+          - tblite
         EESSI_VERSION: ["2023.06"]
     runs-on: ${{ matrix.os }}
 
