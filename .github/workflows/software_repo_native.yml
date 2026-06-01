@@ -21,6 +21,16 @@ jobs:
           - Nextflow
           - tblite
         EESSI_VERSION: ["2023.06"]
+        include:
+          - EESSI_DEMO: Bioconductor
+            EESSI_VERSION: "2025.06"
+            os: [ubuntu-24.04, ubuntu-24.04-arm]
+          - EESSI_DEMO: GROMACS
+            EESSI_VERSION: "2025.06"
+            os: [ubuntu-24.04, ubuntu-24.04-arm]
+          - EESSI_DEMO: QuantumESPRESSO
+            EESSI_VERSION: "2025.06"
+            os: [ubuntu-24.04, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
 
     steps:
