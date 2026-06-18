@@ -5,6 +5,10 @@ if [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION ==
     module load ESPResSo/4.2.2-foss-2023a
     module load matplotlib/3.7.2-gfbf-2023a
     module load PyQt5/5.15.10-GCCcore-12.3.0
+elif [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2025.06" ]]; then 
+    module load ESPResSo/4.2.2-foss-2025a
+    module load matplotlib/3.10.3-gfbf-2025a
+    module load PyQt6/6.9.1-GCCcore-14.2.0
 else echo "Don't know which ESPResSo module to load for ${EESSI_CVMFS_REPO}/versions/${EESSI_VERSION}" >&2; exit 1
 fi
 
