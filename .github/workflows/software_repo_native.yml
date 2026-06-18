@@ -20,7 +20,16 @@ jobs:
           - QuantumESPRESSO
           - Nextflow
           - tblite
-        EESSI_VERSION: ["2023.06"]
+        EESSI_VERSION: ["2023.06", "2025.06"]
+        exclude:
+          - EESSI_DEMO: OpenFOAM
+            EESSI_VERSION: "2025.06"
+          - EESSI_DEMO: TensorFlow
+            EESSI_VERSION: "2025.06"
+          - EESSI_DEMO: PyTorch
+            EESSI_VERSION: "2025.06"
+          - EESSI_DEMO: tblite
+            EESSI_VERSION: "2025.06"
     runs-on: ${{ matrix.os }}
 
     steps:
