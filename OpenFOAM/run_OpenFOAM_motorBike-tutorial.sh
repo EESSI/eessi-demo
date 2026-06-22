@@ -1,6 +1,9 @@
 #!/bin/bash
 
-module load OpenFOAM/11-foss-2023a
+if [ -z ${EBROOTOPENFOAM} ]; then
+    echo "ERROR: No OpenFOAM module loaded!" >&2
+    exit 1
+fi
 
 which ssh &> /dev/null
 if [ $? -ne 0 ]; then
