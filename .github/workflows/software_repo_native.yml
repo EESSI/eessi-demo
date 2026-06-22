@@ -26,8 +26,6 @@ jobs:
             EESSI_VERSION: "2025.06"
           - EESSI_DEMO: PyTorch
             EESSI_VERSION: "2025.06"
-          - EESSI_DEMO: tblite
-            EESSI_VERSION: "2025.06"
     runs-on: ${{ matrix.os }}
 
     steps:
