@@ -43,7 +43,6 @@ jobs:
 
       - name: Run demo
         run: |
-            source /cvmfs/software.eessi.io/versions/${{matrix.EESSI_VERSION}}/init/bash
             cd ${{matrix.EESSI_DEMO}}
             pwd
             if [ ${{matrix.EESSI_DEMO}} = OpenFOAM ]; then
