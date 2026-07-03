@@ -1,9 +1,9 @@
 if [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2023.06" ]]; then
-    echo "Running demo for QuantumESPRESSO 7.3.1 ..."
+    echo "Running demo with QuantumESPRESSO 7.3.1 ..."
     module load QuantumESPRESSO/7.3.1-foss-2023a
     module load gnuplot/5.4.8-GCCcore-12.3.0
 elif [[ $EESSI_CVMFS_REPO == "/cvmfs/software.eessi.io" ]] && [[ $EESSI_VERSION == "2025.06" ]]; then
-    echo "Running demo for QuantumESPRESSO 7.3.1 ..."
+    echo "Running demo with QuantumESPRESSO 7.5 ..."
     module load QuantumESPRESSO/7.5-foss-2025b
     module load gnuplot/6.0.3-GCCcore-14.3.0
 else
