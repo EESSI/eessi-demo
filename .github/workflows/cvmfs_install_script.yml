@@ -1,4 +1,4 @@
-name: Tests for EESSI software repo (native access)
+name: Tests for CVMFS install script
 
 on:
   push:
