@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Exit on any command failure
+set -e
+
 # Note: The cvmfs package server has a browseable mirror under
 # https://cvmrepo.s3.cern.ch/cvmrepo -> https://cvmrepo.web.cern.ch/cvmrepo
 
