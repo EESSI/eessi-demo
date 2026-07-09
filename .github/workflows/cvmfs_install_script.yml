@@ -1,6 +1,15 @@
 name: Tests for EESSI software repo (native access)
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    paths:
+      - scripts/install_cvmfs_eessi.sh
+
+  pull_request:
+    paths:
+      - scripts/install_cvmfs_eessi.sh
+
+  workflow_dispatch:
 
 permissions: read-all
 
