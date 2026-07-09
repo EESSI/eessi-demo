@@ -40,6 +40,8 @@ then
   dry_run "yum install -y cvmfs"
 elif [[ "${ID_LIKE}" =~ "debian" ]] || [[ "${ID}" =~ "debian" ]]
 then
+  export DEBIAN_FRONTEND=noninteractive
+  export APT_LISTCHANGES_FRONTEND=none
   dry_run "apt-get update"
   dry_run "apt-get install -y lsb-release wget"
   dry_run "wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb"
