@@ -14,6 +14,7 @@ on:
 permissions: read-all
 
 jobs:
+  install_cvmfs_script:
     strategy:
       fail-fast: false
       matrix:
