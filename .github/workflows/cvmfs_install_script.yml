@@ -1,0 +1,37 @@
+name: Tests for CVMFS install script
+
+on:
+  push:
+    paths:
+      - scripts/install_cvmfs_eessi.sh
+
+  pull_request:
+    paths:
+      - scripts/install_cvmfs_eessi.sh
+
+  workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+  install_cvmfs_script:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
+
+      - name: Run the installation script in dry run mode
+        run: |
+            ./scripts/install_cvmfs_eessi.sh
+
+      - name: Run the installation script and test
+        run: |
+            sudo ./scripts/install_cvmfs_eessi.sh
+            ls /cvmfs/software.eessi.io

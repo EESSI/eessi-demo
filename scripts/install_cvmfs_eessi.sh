@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Exit on any command failure
+set -e
+
 # Note: The cvmfs package server has a browseable mirror under
 # https://cvmrepo.s3.cern.ch/cvmrepo -> https://cvmrepo.web.cern.ch/cvmrepo
 
@@ -36,6 +40,8 @@ then
   dry_run "yum install -y cvmfs"
 elif [[ "${ID_LIKE}" =~ "debian" ]] || [[ "${ID}" =~ "debian" ]]
 then
+  export DEBIAN_FRONTEND=noninteractive
+  export APT_LISTCHANGES_FRONTEND=none
   dry_run "apt-get update"
   dry_run "apt-get install -y lsb-release wget"
   dry_run "wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb"
